@@ -17,7 +17,6 @@ router.get('/', verificaAutenticacao, function(req, res, next) {
         console.log(data)
         if(data.studentNumber){ res.render('index',{data:data})}
         else{
-          //res.render('index',{data:data})
           res.render('register',{data:data})
         }
       })
@@ -57,6 +56,56 @@ router.get('/register',function(req, res, next) {
   res.render('register');
 })
 
+router.post('/registerGoogle',upload.fields([{name:'pictureProfile', maxCount: 1},{name:'pictureHeader', maxCount: 1}]), function(req, res, next){
+  aux = req.body
+  auxf = req.files
+  if(aux.firstName != "" && aux.lastName != "" && aux.studentNumber != "" && auxf["pictureProfile"][0].path != "" && auxf["pictureHeader"][0].path != "" && aux.year != "" && aux.yearOfInscription != ""){
+    axios.get("http://localhost:3001/aux/checkSN/"+aux.studentNumber)
+      .then(data=>{
+        if(data.data == true){
+        res.render('register',{error:true});
+        }
+        else{
+          var today = new Date()
+          today = dateFormat(today, 'dd-mm-yyyy HH:MM:ss')
+          var profilePic = fs.readFileSync(auxf["pictureProfile"][0].path)
+          var headerPic = fs.readFileSync(auxf["pictureHeader"][0].path)
+          var encode_profilePic = profilePic.toString('base64');
+          var encode_headerPic = headerPic.toString('base64');
+          var objectAux = {
+            firstName: aux.firstName,
+            lastName: aux.lastName,
+            studentNumber: aux.studentNumber,
+            followers:[],
+            following:[],
+            profilePhoto:{
+              filetype: auxf["pictureProfile"][0].mimetype,
+              photo: new Buffer(encode_profilePic, 'base64')
+            },
+            bannerPhoto:{
+              filetype: auxf["pictureHeader"][0].mimetype,
+              photo: new Buffer(encode_headerPic, 'base64')
+            },
+            curso:{
+              yearOfInscription: aux.yearOfInscription,
+              yearOfConclusion: aux.yearOfConclusion,
+              year: aux.year
+            },
+            lastAcess:today
+          }
+          axios.put(lhost+"/users/googleRegister/"+req.user.email, objectAux)
+            .then(dados => res.redirect('/'))
+            .catch(e => res.render('error', {error: e}))
+            }
+          })
+      .catch(erro=>console.log(erro))   
+  }
+  else{
+    res.render('register',{error:true});
+  }
+})
+
+
 router.post('/register', upload.fields([{name:'pictureProfile', maxCount: 1},{name:'pictureHeader', maxCount: 1}]), function(req, res, next){
   aux = req.body
   auxf = req.files
@@ -95,11 +144,11 @@ router.post('/register', upload.fields([{name:'pictureProfile', maxCount: 1},{na
                       following:[],
                       profilePhoto:{
                         filetype: auxf["pictureProfile"][0].mimetype,
-                        photo: encode_profilePic
+                        photo: new Buffer(encode_profilePic, 'base64')
                       },
                       bannerPhoto:{
                         filetype: auxf["pictureHeader"][0].mimetype,
-                        photo: encode_headerPic
+                        photo: new Buffer(encode_headerPic, 'base64')
                       },
                       curso:{
                         yearOfInscription: aux.yearOfInscription,

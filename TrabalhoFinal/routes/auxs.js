@@ -17,4 +17,10 @@ router.get('/checkSN/:sn', function(req, res, next) {
     .catch(e => res.status(500).jsonp(e))
 });
 
+router.get('/photos/:sn',function(req, res, next) {
+  axios.get(url+"/users/photos/"+req.params.sn)
+    .then(dados =>res.jsonp(dados.data))
+    .catch(e => res.status(500).jsonp(e))
+});
+
 module.exports = router;

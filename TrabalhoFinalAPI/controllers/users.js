@@ -26,8 +26,59 @@ module.exports.loginGoogle = (email) =>{
     return Users.findOne({email:email},{_id:0,email:1,googleId:1}).exec()
 } 
 
+module.exports.updateGoogleAccount = (email,body) =>{
+    return Users.findOneAndUpdate({email:email},body).exec()
+}
+
 module.exports.checkEmail = email => {
     return Users.exists({email:email})
+}
+
+module.exports.getUserProfile = sn =>{
+    return Users.aggregate([
+        {
+          '$match': {
+            'studentNumber': sn
+          }
+        }, {
+          '$project': {
+            'firstName': 1, 
+            'lastName': 1, 
+            'email': 1, 
+            'curso': 1, 
+            'lastAcess': 1, 
+            'studentNumber': 1,
+            'profilePhoto':1,
+            'bannerPhoto':1,
+            'followers': {
+              '$cond': {
+                'if': {
+                  '$isArray': '$followers'
+                }, 
+                'then': {
+                  '$size': '$followers'
+                }, 
+                'else': 'NA'
+              }
+            }, 
+            'following': {
+              '$cond': {
+                'if': {
+                  '$isArray': '$following'
+                }, 
+                'then': {
+                  '$size': '$following'
+                }, 
+                'else': 'NA'
+              }
+            }
+          }
+        }
+      ])
+}
+
+module.exports.getUserProfilePics = sn =>{
+  return Users.findOne({studentNumber:sn},{_id:0,bannerPhoto:1,profilePhoto:1}).exec()
 }
 
 module.exports.insert = u => {

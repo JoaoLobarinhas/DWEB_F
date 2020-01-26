@@ -22,6 +22,18 @@ router.get('/googleLogin/:email', passport.authenticate('jwt',{session:false}), 
     .catch(e => res.status(500).jsonp(e))
 })
 
+router.put('/googleRegister/:email', passport.authenticate('jwt',{session:false}), function(req, res, next){
+  Users.updateGoogleAccount(req.params.email,req.body)
+    .then(dados => res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+})
+
+router.get('/photos/:sn', passport.authenticate('jwt',{session:false}), function(req, res, next){
+  Users.getUserProfilePics(req.params.sn)
+    .then(dados => res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+})
+
 router.get('/login/:email', passport.authenticate('jwt',{session:false}), function(req, res, next) {
   Users.loginUser(req.params.email)
     .then(dados =>res.jsonp(dados))
@@ -33,6 +45,14 @@ router.get('/checkUser/:email', passport.authenticate('jwt',{session:false}), fu
     .then(dados =>res.jsonp(dados))
     .catch(e => res.status(500).jsonp(e))
 });
+
+router.get('/getUserProfile/:sn', passport.authenticate('jwt',{session:false}), function(req, res, next) {
+  Users.getUserProfile(req.params.sn)
+    .then(dados =>{
+      res.jsonp(dados)})
+    .catch(e => res.status(500).jsonp(e))
+});
+
 
 router.get('/:studentNumber', passport.authenticate('jwt',{session:false}), function(req, res, next) {
   Users.getUser(req.params.studentNumber)

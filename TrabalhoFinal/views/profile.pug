@@ -1,0 +1,46 @@
+extends layout
+
+append head
+    script(src="/axios/axios.min.js")
+    script(src="/javascripts/form-profiles.js")
+    link(rel="stylesheet", href="/stylesheets/styleProfiles.css")
+
+block content
+    .container.w-100
+        .mb-3.header-background.border-top-0.border-light.mb-3(id="headerPhoto")
+            div.pb-5
+            img.mx-auto.d-block.profile-picture.border.border-white(id="profilePhoto")
+            h4.pt-3.text-center.text-white.pb-3=data.firstName+" "+data.lastName
+        .row.justify-content-md-center
+            .col-md-4.order-md-1.mb-4.mr-3.pt-2.background-white.border.border-light
+                ul.list-group
+                    li.list-group-item
+                        .d-inline-flex.mt-2
+                            i.material-icons person_outline
+                            h5 Information
+                    li.list-group-item
+                        .d-inline-flex
+                            i.material-icons.pr-2 perm_contact_calendar
+                            p(id="studentNumber")="Studente Number: "+data.studentNumber
+                    li.list-group-item
+                        .d-inline-flex
+                            i.material-icons.pr-2 calendar_today
+                            p="Year of Inscription: "+data.curso.yearOfInscription
+                    if(data.curso.yearOfConclusion)
+                        li.list-group-item
+                            .d-inline-flex
+                                i.material-icons.pr-2 date_range
+                                p="Year Of Conclusion: "+data.curso.yearOfConclusion
+                    li.list-group-item
+                        .d-inline-flex
+                            i.material-icons.pr-2 today
+                            p="Year of Enrollment: "+data.curso.year
+                div.pt-3
+                    .row.pb-3
+                        .col
+                            button.btn.btn-light.text-center(id="btnFollowing")="Following: "+data.following
+                        .col
+                            button.btn.btn-light.text-center(id="btnFollowers")="Followers: "+data.followers
+                    btn.btn.btn-secondary.btn-lg.btn-block.mb-3.follow-button-grad(id="btnFollow") Follow
+            .col-md-7.order-md-2.border.border-light.background-white
+                h5 Publications
