@@ -11,9 +11,50 @@ router.get('/checkSN/:sn', passport.authenticate('jwt',{session:false}),function
 })
 
 router.get('/checkEmail/:email', passport.authenticate('jwt',{session:false}), function(req, res, next) {
-  Users.checkEmail(req.params.email)
+  if(req.query.sn){
+    Users.checkEmailAndSn(req.params.email,req.query.sn)
     .then(dados =>res.jsonp(dados))
     .catch(e => res.status(500).jsonp(e))
+  }
+  else{
+    Users.checkEmail(req.params.email)
+    .then(dados =>res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+  }
+})
+
+router.put('/follow/:email', passport.authenticate('jwt',{session:false}),function(req, res, next) {
+  Users.startFollow(req.params.email,req.query.sn)
+    .then(dados =>res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+})
+
+router.put('/followed/:email', passport.authenticate('jwt',{session:false}),function(req, res, next) {
+  Users.getStudentNumber(req.params.email)
+  .then(dados =>{
+    console.log(dados.studentNumber)
+    Users.getFollowed(req.query.sn,dados.studentNumber)
+    .then(dados =>res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+  })
+  .catch(e => res.status(500).jsonp(e))
+})
+
+router.put('/stopFollow/:email', passport.authenticate('jwt',{session:false}),function(req, res, next) {
+  Users.stopFollow(req.params.email,req.query.sn)
+    .then(dados =>res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+})
+
+router.put('/unfollowed/:email', passport.authenticate('jwt',{session:false}),function(req, res, next) {
+  Users.getStudentNumber(req.params.email)
+  .then(dados =>{
+    console.log(dados.studentNumber)
+    Users.unFollowed(req.query.sn,dados.studentNumber)
+    .then(dados =>res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+  })
+  .catch(e => res.status(500).jsonp(e))
 })
 
 router.get('/googleLogin/:email', passport.authenticate('jwt',{session:false}), function(req, res, next){
@@ -32,6 +73,20 @@ router.get('/photos/:sn', passport.authenticate('jwt',{session:false}), function
   Users.getUserProfilePics(req.params.sn)
     .then(dados => res.jsonp(dados))
     .catch(e => res.status(500).jsonp(e))
+})
+
+router.get('/photosProfile/:email', passport.authenticate('jwt',{session:false}), function(req, res, next){
+  Users.getUserPic(req.params.email)
+    .then(dados => res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+})
+
+router.get('/following/:email', passport.authenticate('jwt',{session:false}), function(req, res, next){
+  if(req.query.sn){
+    Users.checkIfFollow(req.params.email,req.query.sn)
+    .then(dados => res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+  }
 })
 
 router.get('/login/:email', passport.authenticate('jwt',{session:false}), function(req, res, next) {
@@ -54,6 +109,13 @@ router.get('/getUserProfile/:sn', passport.authenticate('jwt',{session:false}), 
 });
 
 
+router.get('/getCurrentProfile/:email', passport.authenticate('jwt',{session:false}), function(req, res, next) {
+  Users.getCurrentUser(req.params.email)
+    .then(dados =>{
+      res.jsonp(dados)})
+    .catch(e => res.status(500).jsonp(e))
+});
+
 router.get('/:studentNumber', passport.authenticate('jwt',{session:false}), function(req, res, next) {
   Users.getUser(req.params.studentNumber)
     .then(dados =>res.jsonp(dados))
@@ -65,6 +127,5 @@ router.post('/', passport.authenticate('jwt',{session:false}), function(req, res
     .then(dados => res.jsonp(dados))
     .catch(e => res.status(500).jsonp(e))
 })
-
 
 module.exports = router;

@@ -7,9 +7,9 @@ append head
 
 block content
     .container.w-100
-        .mb-3.header-background.border-top-0.border-light.mb-3(id="headerPhoto")
+        .mb-3.header-background.border-top-0.border-light.mb-3(id="headerPhoto", style={"background-image": 'url('+headerPic+')'})
             div.pb-5
-            img.mx-auto.d-block.profile-picture.border.border-white(id="profilePhoto")
+            img.mx-auto.d-block.profile-picture.border.border-white(id="profilePhoto", src=profilePic)
             h4.pt-3.text-center.text-white.pb-3=data.firstName+" "+data.lastName
         .row.justify-content-md-center
             .col-md-4.order-md-1.mb-4.mr-3.pt-2.background-white.border.border-light
@@ -41,6 +41,9 @@ block content
                             button.btn.btn-light.text-center(id="btnFollowing")="Following: "+data.following
                         .col
                             button.btn.btn-light.text-center(id="btnFollowers")="Followers: "+data.followers
-                    btn.btn.btn-secondary.btn-lg.btn-block.mb-3.follow-button-grad(id="btnFollow") Follow
+                    if(following)
+                        btn.btn.btn-secondary.btn-lg.btn-block.mb-3(id="btnFollow") Unfollow
+                    else
+                        btn.btn.btn-secondary.btn-lg.btn-block.mb-3.follow-button-grad(id="btnFollow") Follow
             .col-md-7.order-md-2.border.border-light.background-white
                 h5 Publications

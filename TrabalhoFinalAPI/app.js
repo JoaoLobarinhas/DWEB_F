@@ -44,6 +44,8 @@ passport.use(new JWTStrategy({
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var notifiRouter = require('./routes/notifications');
+var publicRouter = require('./routes/publications');
 
 var app = express();
 
@@ -57,7 +59,10 @@ app.use(express.urlencoded({ extended: false,limit: '1mb', parameterLimit: 10000
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
+//app.use('/notifi', notifiRouter)
 app.use('/users', usersRouter);
+app.use('/public', publicRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

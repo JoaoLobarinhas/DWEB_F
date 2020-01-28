@@ -14,8 +14,19 @@ router.get('/', verificaAutenticacao, function(req, res, next) {
   axios.get(lhost+"/users/checkUser/"+req.user.email)
     .then(dados =>{
         const data = dados.data
-        console.log(data)
-        if(data.studentNumber){ res.render('index',{data:data})}
+        if(data.studentNumber){
+          axios.get(lhost+"/users/photosProfile/"+req.user.email)
+            .then(dados =>{
+              const images = dados.data
+              base64img = _arrayBufferToBase64(images.profilePhoto.photo.data)
+              srcProfile = "data:"+images.profilePhoto.filetype+";base64,"+base64img
+              res.render('index',{imageP:srcProfile})
+            })
+            .catch(e=>{
+              console.log(e)
+              res.status(500).jsonp(e)
+            })
+        }
         else{
           res.render('register',{data:data})
         }
@@ -23,8 +34,7 @@ router.get('/', verificaAutenticacao, function(req, res, next) {
     .catch(e => res.status(500).jsonp(e))
 });
 
-router.get('/auth/google',
-  passport.authenticate('google', { scope: ['email profile'] }));
+router.get('/auth/google', passport.authenticate('google', { scope: ['email profile'] }));
 
 router.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/home' }),
@@ -49,6 +59,8 @@ router.get('/logout',verificaAutenticacao,function(req, res, next) {
 router.post('/home', passport.authenticate('local', 
 { successRedirect: '/',
   failureRedirect: '/home?failedLogin=true',
+  badRequestMessage : 'Wrong username or password.',
+  failureFlash: true
 })
 );
 
@@ -182,6 +194,17 @@ function verificaAutenticacao(req,res,next){
     next();
   } else{
     res.redirect("/home");}
+}
+
+function _arrayBufferToBase64( buffer ) {
+  var binary = '';
+  var bytes = new Uint8Array( buffer );
+  var len = bytes.byteLength;
+  for (var i = 0; i < len; i++) {
+      binary += String.fromCharCode( bytes[ i ] );
+  }
+  var image = Buffer.from(binary,'binary').toString('base64');
+  return image
 }
 
 function verificaAutenticacaoHome(req,res,next){

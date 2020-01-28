@@ -5,7 +5,9 @@ html
       title MIEI Thing
       script(src="/jquery/jquery.min.js")
       script(src="/popper/popper.min.js")
+      //script(src="/socket.io/socket.io.js")
       script(src="/jsBootstrap/bootstrap.min.js")
+      //script(src="/javascripts/socketIOhandler.js")
       link(rel='stylesheet', href='/css/bootstrap.css')
       link(rel="stylesheet", href="/stylesheets/colors.css")
       link(rel="stylesheet", href="/stylesheets/styleBar.css")
@@ -25,7 +27,7 @@ html
           li.nav-item
             a.nav-link(href="#") Login
           li.nav-item
-            a.nav-link(href="#") Register
+            a.nav-link(href="/user/") My Profile
           li.nav-item
             a.nav-link(href="/logout") Logout
     block content

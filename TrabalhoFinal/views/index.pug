@@ -1,5 +1,49 @@
 extends layout
 
+append head
+    script(src="/axios/axios.min.js")
+    //script(src="/javascripts/form-ownProfiles.js")
+    script(src="/javascripts/_index.js")
+    link(rel="stylesheet", href="/stylesheets/styleIndex.css")
+
 block content
-  h1= title
-  p Welcome to #{title}
+  .container.w-100
+    .row
+      .col-md-2.order-md-1.d-inline-flex.p-2.sidebar.pt-5.pr-0.pl-0
+        .sidebar.sidebar-sticky.border-orange
+          ul.nav.flex-column
+            li.nav-item
+              a.nav-link(href="/user/")
+                .d-inline-flex.mt-2
+                  i.material-icons perm_identity
+                  h5 Profile
+          ul.nav.flex-column
+            li.nav-item
+              a.nav-link.active(href="/")
+                .d-inline-flex.mt-2
+                  i.material-icons featured_play_list
+                  h5 Feed
+          ul.nav.flex-column
+            li.nav-item
+              a.nav-link(href="/user/")
+                .d-inline-flex.mt-2
+                  i.material-icons group
+                  h5 Groups
+      .col-md-8.order-md-2.ml-sm-auto.col-lg-10.rounded.px-4.background-white.mt-3
+        form(action="/public/", method="post" id="form")
+          .card.flex-row.flex-wrap.border-0.border-orange
+            .card-header.border-0.background-white
+              img.rounded-circle.img-fluid.img-fluid.mt-2.img-small(src=imageP)
+            .card-block.w-80.px-2.pt-2
+              h4.card-title Make a post
+              textarea.form-control.input-lg.textareaFix(id="text", name="text" placeholder="Something...")
+              div(id="contentUploaded")
+              .d-inline-flex.mt-2
+                span.btn.btn-file.btn-secondary
+                  .d-inline-flex
+                    i.material-icons attachment
+                    h6 Atach a File
+                  input(type="file", name="files",id="files")
+              button.btn.button-grad.text-white.float-right.mt-2.mb-2( id="btnSubmit")
+                  h6 Submit
+              small.form-text.text-muted.pb-2(id="feedbackFile") The file can't be larger than 1mb.

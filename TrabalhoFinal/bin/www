@@ -7,6 +7,8 @@
 var app = require('../app');
 var debug = require('debug')('trabahofinal:server');
 var http = require('http');
+// var axios = require('axios');
+// var cookie = require('cookie');
 
 /**
  * Get port from environment and store in Express.
@@ -76,6 +78,50 @@ function onError(error) {
       throw error;
   }
 }
+
+
+/**
+ * SocketIO.
+ */
+// var io = require('socket.io').listen(server);
+
+// io.use(function(socket, next) {
+//   var data = socket.request;
+//   app.cookie(data, {}, function(err) {
+//     var sessionID = data.signedCookies['dwebTrabF'];
+//     console.log(sessionID)
+//     store.get(sessionID, function(err, session) {
+//       if (err || !session) {
+//         return next(new Error('Acesso negado!'));
+//       } else {
+//         socket.handshake.session = session;
+//         return next();
+//       }
+//     });
+//   });
+// });
+
+// io.on('connection', socket =>{
+
+
+//   console.log('We have a user connected !');
+//   var cookief = socket.handshake.headers.cookie; 
+//   console.log(cookief);
+//   var cookies = cookie.parse(socket.handshake.headers.cookie);
+//   console.log(cookies)
+//   app.use(function (req, res, next) {
+//     console.log(req.user)
+//   })
+//   socket.on('followUser',function(data){
+//     console.log(data)
+//     axios.post('http://localhost:3005/notifi/',data)
+//       .then(data =>{
+        
+//         socketId =  getSocketIdFromUserId(user_id);
+//       })
+//       .catch(e=>console.log(e))
+//   });
+// })
 
 /**
  * Event listener for HTTP server "listening" event.

@@ -3,7 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var cors = require('cors')
+var cors = require('cors');
 
 // Módulos de suporte à autenticação
 var uuid = require('uuid/v4');
@@ -77,7 +77,7 @@ passport.use(new GoogleStrategy({
 
 // Indica-se ao passport como serializar o utilizador
 passport.serializeUser((user,done) => {
-  console.log('Vou serializar o user: ' + JSON.stringify(user))
+  console.log('Vou serializar o user: ' + user.email)
   // Serialização do utilizador. O passport grava o utilizador na sessão aqui.
   done(null, user.email)
 });
@@ -96,6 +96,7 @@ var userRouter = require('./routes/user');
 var auxRouter = require('./routes/auxs');
 
 var app = express();
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -134,7 +135,6 @@ app.use(flash());
 app.use('/', indexRouter);
 app.use('/user', userRouter);
 app.use('/aux', auxRouter);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
