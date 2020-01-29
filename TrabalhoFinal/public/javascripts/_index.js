@@ -1,13 +1,18 @@
 $(document).ready(function() {
 
     if($("#btnSubmit").length){
-        document.getElementById("btnSubmit").disabled = true; 
+        document.getElementById("btnSubmit").disabled = true;
+        $("#btnFollow").click(function(){
+            if(validateForm()){
+                document.getElementById("form").submit();
+            }
+        })
     }
 
     $("btnSubmit").attr("aria-disabled", true);
     if ($("#text").length){
         $("#text").keyup(function(){
-            if($("#text").val() == "" || $("#text").val() >= 249){
+            if($("#text").val() == "" || $("#text").val().length >= 249){
                 $("#text").attr('class', 'form-control input-lg textareaFix is-invalid')
                 document.getElementById("btnSubmit").disabled = true; 
             }
@@ -71,3 +76,13 @@ function readURLFile(input){
       $("#feedbackFile").text("You can't upload more than one file per input.")
     }
   }
+
+function validateForm(){
+    var aux = true
+    if($("#text").val() == "" || $("#text").val() >= 249){
+        $("#text").attr('class', 'form-control input-lg textareaFix is-invalid')
+        document.getElementById("btnSubmit").disabled = true;
+        aux=false
+    }
+    return aux
+}

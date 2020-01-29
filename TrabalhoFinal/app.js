@@ -3,7 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var favicon = require('serve-favicon')
 var cors = require('cors');
+const paginate = require('express-paginate');
 
 // Módulos de suporte à autenticação
 var uuid = require('uuid/v4');
@@ -94,6 +96,7 @@ passport.deserializeUser((email, done) => {
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var auxRouter = require('./routes/auxs');
+var publicRouter = require('./routes/public');
 
 var app = express();
 
@@ -103,11 +106,12 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
-app.use(express.json({limit: '1mb'}));
-app.use(express.urlencoded({ extended: false,limit: '1mb', parameterLimit: 10000 }));
+app.use(express.json({limit: '5mb'}));
+app.use(express.urlencoded({ extended: false,limit: '5mb', parameterLimit: 10000 }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
+app.use(favicon(path.join(__dirname, 'public', 'favicon.png')))
 app.use('/jquery', express.static(path.join(__dirname + '/node_modules/jquery/dist')));
 app.use('/popper', express.static(path.join(__dirname + '/node_modules/popper.js/dist')));
 app.use('/jsBootstrap', express.static(path.join(__dirname + '/node_modules/bootstrap/dist/js')));
@@ -133,8 +137,10 @@ app.use(passport.session());
 app.use(flash());
 
 app.use('/', indexRouter);
-app.use('/user', userRouter);
 app.use('/aux', auxRouter);
+app.use(paginate.middleware(10, 50));
+app.use('/user', userRouter);
+app.use('/public', publicRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

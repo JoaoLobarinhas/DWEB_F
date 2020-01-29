@@ -12,25 +12,11 @@ body, html {
   border-left: 1px solid var(--orange) !important;
 }
 
-.w-80{
-  width: 80%;
-}
-
 .textareaFix{ 
   border-style: none; 
   border-color: Transparent; 
   overflow: auto;
   resize: none;      
-}
-
-.max-height-img{
-  max-height: 400px;
-  width: 100%;
-}
-
-.img-preview{
-  width: 70px;
-  height: 90px;
 }
 
 .button-grad{

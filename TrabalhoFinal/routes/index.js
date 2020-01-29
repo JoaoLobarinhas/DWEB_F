@@ -18,9 +18,37 @@ router.get('/', verificaAutenticacao, function(req, res, next) {
           axios.get(lhost+"/users/photosProfile/"+req.user.email)
             .then(dados =>{
               const images = dados.data
-              base64img = _arrayBufferToBase64(images.profilePhoto.photo.data)
-              srcProfile = "data:"+images.profilePhoto.filetype+";base64,"+base64img
-              res.render('index',{imageP:srcProfile})
+              var base64img = _arrayBufferToBase64(images.profilePhoto.photo.data)
+              var srcProfile = "data:"+images.profilePhoto.filetype+";base64,"+base64img
+              var body = {following:data.following}
+              axios.post(lhost+"/public/feed",body)
+              .then(public =>{
+                const publics = public.data
+                publics.forEach(element => {
+                  console.log(element.owner)
+                  base64 = _arrayBufferToBase64(element.owner.photo.data)
+                  src = "data:"+element.owner.filetype+";base64,"+base64
+                  element.owner.photo = src
+                  if(element.file){
+                    filePublication64 = _arrayBufferToBase64(element.file.pubCont.data)
+                    srcFile = "data:"+element.file.filetype+";base64,"+filePublication64
+                    element.file.pubCont=srcFile
+                    if(element.file.filetype == "image/jpeg" || element.file.filetype == "image/png" || element.file.filetype == "image/gif"){
+                      element.file.image =true
+                    }
+                    else if(element.file.filetype == "application/pdf"){
+                      element.file.pdf = true
+                    }
+                    else if(element.file.filetype == "application/msword" || element.file.filetype == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"){
+                      element.file.doc =true
+                    }
+                  }
+                });
+                res.render('index',{imageP:srcProfile,public:publics})
+              })
+              .catch(e =>{
+                console.log(e)
+                res.render('error',{message:e})})
             })
             .catch(e=>{
               console.log(e)

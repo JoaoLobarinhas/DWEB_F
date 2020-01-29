@@ -25,3 +25,22 @@ body, html {
     background: rgb(221,65,12);
     background: radial-gradient(circle, rgba(221,65,12,1) 0%, rgba(188,32,0,1) 94%, rgba(156,0,0,1) 100%);
 }
+
+.btn-file {
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-file input[type=file] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 100px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    opacity: 0;
+    outline: none;   
+    cursor: inherit;
+    display: block;
+  }
