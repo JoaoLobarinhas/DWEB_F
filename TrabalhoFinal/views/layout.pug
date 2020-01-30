@@ -15,9 +15,9 @@ html
   body
     nav.navbar.navbar-expand-lg.navbar-dark.fixed-top(id="topNav")
       .navbar-header
-        a.navbar-brand(href="/") MIEI ISNetwork
-      form.form-inline.my-2.my-md-0(action="/search", method="get" id="searchBar")
-        input.form-control(type="text", placeholder="Search")
+        a.navbar-brand(href="/") MIEI Thing
+      form.form-inline.my-2.my-md-0(action="/user/search", method="post" id="searchBar")
+        input.form-control(type="text", placeholder="Search", id="search", name="search")
         button(type="submit", id="buttonSearch")
           i.material-icons search
       button.navbar-toggler.collapsed(type="button", data-toggle="collapse", data-target="#topBar", aria-controls="topBar", aria-expanded="true", aria-label="Toggle navigation")

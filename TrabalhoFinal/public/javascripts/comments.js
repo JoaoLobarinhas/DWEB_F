@@ -2,15 +2,19 @@ $(document).ready(function(){
 
     $(document).keyup(function(e){
         if(e.target.tagName == "INPUT"){
-            if(e.target.value != "" && e.target.value <=99){
+            if(e.target.value == ""){
                 id=e.target.id
-                $("#"+id).attr('class', 'form-control mt-2 is-invalid')
-                document.getElementById("btn_"+id).hidden = false;
+                if(id!="search"){
+                  $("#"+id).attr('class', 'form-control mt-2 is-invalid')
+                  document.getElementById("btn_"+id).hidden = false;
+                }
             }
             else{
                 id=e.target.id
-                $("#"+id).attr('class', 'form-control mt-2 is-valid')
-                document.getElementById("btn_"+id).hidden = false; 
+                if(id!="search"){
+                  $("#"+id).attr('class', 'form-control mt-2 is-valid')
+                  document.getElementById("btn_"+id).hidden = false;
+                } 
             }
         }
     })
@@ -20,7 +24,7 @@ $(document).ready(function(){
             id=e.target.id
             id=id.split("fl_")
             id = id[1]
-            readURLFile(e.target,id)
+            readURLFiles(e.target,id)
         }
     })
 
@@ -37,7 +41,7 @@ function validateForm(id){
 }
 
 
-function readURLFile(input,id){
+function readURLFiles(input,id){
     $( "#pr_"+id ).empty();
     if (input.files.length == 1){
       console.log(input.files[0].size)

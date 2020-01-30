@@ -23,12 +23,10 @@ $(document).ready(function() {
         })
     }
 
-    if($("#files").length){
-        if($("#contentUploaded").length){
-            $("#files").on("change", function(){
-                readURLFile(this)
-            })
-        }
+    if($("#ogfiles").length){
+      $("#ogfiles").on("change", function(){
+        readURLFile(this)
+      })
     }
 
 });
@@ -41,6 +39,7 @@ function readURLFile(input){
         var reader = new FileReader();
         reader.onload = function(e){
           var image = e.target.result;
+          console.log(image)
           if(image.includes("data:image/gif") || image.includes("data:image/png") || image.includes("data:image/jpeg")){
             $("#contentUploaded").append( '<img class="img-fluid mt-2 mb-2 max-height-img", id="imgAdd"/>');
             $('#imgAdd').attr('src', e.target.result);
@@ -48,6 +47,7 @@ function readURLFile(input){
             $("#feedbackFile").text("Valid photo.")
           }
           else if(image.includes("data:application/pdf")){
+            console.log("here")
             $("#contentUploaded").append('<div class="card"><div class="row no-gutters"><div class="col-3"><img class="img-fluid img-preview" src="/images/pdf.png" alt=""></div><div class="col"><div class="card-block px-2"><h5 class="card-title pt-2" id="docTitle"></h5></div></div></div></div>');
             $('#docTitle').text(input.files[0].name);
             $("#feedbackFile").attr('class', 'form-text text-success');

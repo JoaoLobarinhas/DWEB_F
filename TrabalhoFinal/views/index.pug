@@ -2,8 +2,8 @@ extends layout
 
 append head
     script(src="/axios/axios.min.js")
-    script(src="/javascripts/comments.js")
     script(src="/javascripts/_index.js")
+    script(src="/javascripts/comments.js")
     link(rel="stylesheet", href="/stylesheets/styleIndex.css")
     link(rel="stylesheet", href="/stylesheets/styleProfiles.css")
     link(rel="stylesheet", href="/stylesheets/stylePublic.css")
@@ -45,12 +45,13 @@ block content
                   .d-inline-flex
                     i.material-icons attachment
                     h6 Atach a File
-                  input(type="file", name="files", id="files")
+                  input(type="file", name="files", id="ogfiles")
               button.btn.button-grad.text-white.float-right.mt-2.mb-2( id="btnSubmit")
                   h6 Submit
               small.form-text.text-muted.pb-2(id="feedbackFile") The file can't be larger than 1mb.
         .container.mt-4.border
-          h5.pt-2.mb-4 Publications
+          if public
+            h5.pt-2.mb-4 Publications
           each pub in public
             .card.flex-row.flex-wrap.mb-3
               .card-header.border-0.background-white
@@ -95,7 +96,7 @@ block content
               div.container.mt-2.border.pb-2
                 form(action="/public/comment/"+pub._id, method="post", enctype="multipart/form-data")
                   .d-flex
-                    input.form-control.mt-2(type="text", placeholder="Comment...", name="text" id=pub._id)
+                    input.form-control.mt-2(type="text", placeholder="Comment...", name="text", tag="comments", id=pub._id)
                     .d-inline-flex.mt-2
                       span.btn.btn-file.btn-secondary.pb-0
                         .d-inline-flex

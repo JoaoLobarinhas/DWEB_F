@@ -119,6 +119,11 @@ router.get('/:sn', verificaAutenticacao, function(req, res, next) {
       res.render('error',{message:"User not found"})})
 });
 
+router.post('/search', verificaAutenticacao, function(req, res, next){
+  console.log(req.body.search)
+  res.redirect('/user/'+req.body.search)
+})
+
 router.post('/followUser', verificaAutenticacao, function(req, res, next){
   const sn = req.body.studentNumber
   axios.get(lhost+"/users/following/"+req.user.email+"?sn="+sn)

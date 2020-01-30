@@ -104,7 +104,7 @@ function checkPwd(){
   }
   else if(password.value.length <= 6){
     password.className = "form-control is-invalid"
-    feedback.innerHTML = "Password needs to be at least 6 characters long."
+    feedback.innerHTML = "Password needs to be at least 7 characters long."
     return false
   }
   else{
